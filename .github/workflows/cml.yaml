@@ -1,0 +1,26 @@
+name: Run experiments
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python v3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v1
+        with:
+          version: latest
+
+      - name: Setup environment
+        run: pip install -e .

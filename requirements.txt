@@ -1,0 +1,13 @@
+numpy
+pandas
+spacy
+scikit-learn
+transformers
+datasets
+matplotlib
+seaborn
+plotly
+tqdm
+python-dotenv
+black
+dvc
