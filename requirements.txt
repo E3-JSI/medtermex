@@ -12,6 +12,8 @@ transformers
 datasets
 matplotlib
 datachart
+jsonformer
+bitsandbytes
 # utility
 python-dotenv
 tqdm
