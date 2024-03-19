@@ -53,7 +53,6 @@ def main(hparams):
         compare = compare + test_dataset[instance]["input"] + "\n\n"
 
         for x in json.loads(test_dataset['output'][instance]):
-            print(x)
 
             if x not in entities:
                 continue
