@@ -15,7 +15,11 @@ datachart
 jsonformer
 bitsandbytes
 kor
+json
+peft
+trl
 # utility
 python-dotenv
 tqdm
 black
+argparse
