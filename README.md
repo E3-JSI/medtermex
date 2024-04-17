@@ -50,6 +50,9 @@ TODO: Provide information about the data used in the experiments
 - Where is the data found
 - How is the data structured
 
+## Create the Environment File
+Create a copy of the `.env.example` file named `.env` and replace the `access_token` value with the access token to your Hugging Face account.
+
 ## ⚗️ Experiments
 
 To run the experiments, run the following commands:
@@ -57,6 +60,11 @@ To run the experiments, run the following commands:
 ```bash
 TODO: Provide scripts for the experiments
 ```
+## Examples of running our scripts
+
+Example of calling training_shuffled.py: python training_shuffled.py --model "AdaptLLM/medicine-chat" --dataset "../data/datasetTrainShuffled" --output "../models/AdaptLLM/medicine-chat" --project "PREPARE"
+
+Example of calling test_model: python test.py --model "AdaptLLM/medicine-chat" --adapter "../models/AdaptLLM/medicine-chat/" --dataset "../data/datasetTest" --output "../results/worktesting"
 
 ### Results
 
