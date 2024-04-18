@@ -34,7 +34,7 @@ def main(hparams):
     #import test dataset
     test_dataset = load_from_disk(dataset)
 
-    F1_score = defaultdict(list)
+    f1_score = defaultdict(list)
 
     compare = ""
     #entities = ["Age"]
@@ -57,7 +57,7 @@ def main(hparams):
             if x not in extract:
                 text = f"{x} \nReal: {json.loads(test_dataset['output'][instance])[x]} \nGene: Failed \nMatch: \n\n"
                 compare = compare + text
-                F1_score[x].append(0)
+                f1_score[x].append(0)
                 continue
 
             if json.loads(test_dataset['output'][instance])[x] is None:
@@ -85,17 +85,17 @@ def main(hparams):
             else:
                 f1 = 2*(precision*recall) / (precision+recall)
 
-            F1_score[x].append(f1) 
+            f1_score[x].append(f1) 
                 
         compare = compare + "\n\n\n"
     
-    compare = compare + json.dumps(average_F1_dict(F1_score))
+    compare = compare + json.dumps(average_f1_dict(f1_score))
 
     f.write(compare)
     f.close()
 
 
-def average_F1_dict(di):
+def average_f1_dict(di):
     return {k:sum(v)/len(v) for k,v in di.items()}
 
 
