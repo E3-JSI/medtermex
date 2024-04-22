@@ -1,5 +1,5 @@
 # notebook
-juypterlab
+jupyterlab
 ipywidgets>=7.5
 notebook
 # analysis
@@ -12,6 +12,12 @@ transformers
 datasets
 matplotlib
 datachart
+jsonformer
+bitsandbytes
+kor
+json
+peft
+trl
 # utility
 python-dotenv
 tqdm
