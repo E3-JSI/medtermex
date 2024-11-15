@@ -1,15 +1,34 @@
-# Medical-LLM
+# MedTermEx: Medical Term Extraction
 
-This project focuses on developing and fine-tuning LLMs for medical tasks.
+This project focuses on developing and fine-tuning models for medical term extraction.
 
-Inspired by the [cookiecutter] folder structure.
+## 📚 Papers
+
+In case you use any of the components for your research, please refer to (and cite) the papers:
+
+TODO: Paper
 
 ## ☑️ Requirements
 
 Before starting the project make sure these requirements are available:
 
-- [python]. For setting up the research environment and Python dependencies (version 3.8 or higher).
+- [python]. For setting up the research environment and Python dependencies (version 3.10 or higher).
 - [git]. For versioning your code.
+
+## 📁 Project Structure
+
+The project is structured as follows:
+
+```plaintext
+.
+├── data/                   # Data used in the experiments
+├── models/                 # Trained models
+├── results/                # Results of the experiments
+├── projects/               # The different projects in the repository
+├── .gitignore              # Files and directories to be ignored by git
+├── README.md               # The main README file
+└── pyproject.toml          # Project configuration file
+```
 
 ## 🛠️ Setup
 
@@ -26,7 +45,7 @@ Using the `venv` command, run the following commands:
 python -m venv venv
 
 # activate the environment (UNIX)
-source ./venv/bin/activate
+. ./venv/bin/activate
 
 # activate the environment (WINDOWS)
 ./venv/Scripts/activate
@@ -37,11 +56,56 @@ deactivate
 
 ### Install
 
-To install the requirements run:
+Since the project is a monorepo, we will install the dependencies in the following way:
 
 ```bash
-pip install -e .
+# install the general dependencies
+pip install -e .[dev]
 ```
+
+> [!NOTE]
+> The `dev` extra installs the development dependencies.
+
+Next, install the dependencies for the projects:
+
+```bash
+# install all projects' dependencies
+pip install -e projects/*
+```
+
+> [!NOTE]
+> You can install separate projects by running `pip install -e projects/<project_name>`.
+> See the [Projects](#projects) section for more information.
+
+#### Adding a new project
+
+To add a new project, add the project to the `projects` directory and install the project dependencies.
+
+```bash
+pip install -e projects/<project_name>
+```
+
+### Install the pre-commit hooks
+
+To install the pre-commit hooks, run the following command:
+
+```bash
+pre-commit install
+```
+
+## ⚙️ Environment Variables
+
+Some of the projects require environment variables to be set. To set the environment variables, copy the `.env.example` file to `.env` and replace the values with the correct ones.
+
+## 🚀 Projects
+
+The repository contains multiple projects, each associated with their own way of
+extracting medical terms. Each project is located in the `projects` directory.
+
+Currently, the following projects are available:
+
+- [GLiNER](projects/gliner/README.md): Medical term extraction using the GLiNER models.
+- [Llama](projects/llama/README.md): Medical term extraction using the Llama models.
 
 ## 🗃️ Data
 
@@ -50,82 +114,18 @@ TODO: Provide information about the data used in the experiments
 - Where is the data found
 - How is the data structured
 
-## Create the Environment File
-Create a copy of the `.env.example` file named `.env` and replace the `access_token` value with the access token to your Hugging Face account.
+## 🧹 Cleanup
 
-## ⚗️ Experiments
-
-To run the experiments, run the following commands:
+To cleanup the project, remove the virtual environment and generated files.
 
 ```bash
-TODO: Provide scripts for the experiments
+# deactivate the environment
+deactivate
+# remove the virtual environment
+rm -rf venv
+# remove the generated files
+find . -type d -name '*.egg-info' -exec rm -rf {} +
 ```
-## Examples of running our scripts
-
-Example of calling training_shuffled.py: 
-python scripts/training_shuffled.py \
-    --model AdaptLLM/medicine-chat \
-    --dataset ./data/datasetTrainShuffled \
-    --output ./models/AdaptLLM/medicine-chat \
-    --project PREPARE
-
-Example of calling test_model.py: 
-python scripts/test_model.py \
-    --model "AdaptLLM/medicine-chat" \
-    --adapter "./models/AdaptLLM/medicine-chat/" \
-    --dataset "./data/datasetTest" \
-    --output "./results/worktesting"
-
-### Results
-
-The results folder contains the experiment
-
-TODO: Provide a list/table of experiment results
-
-## 📦️ Available models
-
-This project produced the following models:
-
-- TODO: Name and the link to the model
-
-## 🚀 Using the trained model
-
-When the model is trained, the following script shows how one can use the model:
-
-```python
-TODO: Provide an example of how to use the model
-```
-
-## 📚 Papers
-
-In case you use any of the components for your research, please refer to (and cite) the papers:
-
-TODO: Paper
-
-### 📓 Related work
-
-#### Models
-
-[Chen, Zeming, et al. "MEDITRON-70B: Scaling Medical Pretraining for Large Language Models." arXiv preprint arXiv:2311.16079 (2023).](https://arxiv.org/abs/2311.16079)
-
-[Wang, Guangyu, et al. "ClinicalGPT: Large Language Models Finetuned with Diverse Medical Data and Comprehensive Evaluation." arXiv preprint arXiv:2306.09968 (2023).](https://arxiv.org/abs/2306.09968)
-
-[Wu, Chaoyi, et al. "Pmc-llama: Further finetuning llama on medical papers." arXiv preprint arXiv:2304.14454 (2023).](https://arxiv.org/abs/2304.14454)
-
-[Touvron, Hugo, et al. "Llama 2: Open foundation and fine-tuned chat models." arXiv preprint arXiv:2307.09288 (2023).](https://arxiv.org/abs/2307.09288)
-
-[Jiang, Albert Q., et al. "Mistral 7B." arXiv preprint arXiv:2310.06825 (2023).](https://arxiv.org/abs/2310.06825)
-
-#### Optimization Algorithms
-
-[Dettmers, Tim, et al. "Qlora: Efficient finetuning of quantized llms." arXiv preprint arXiv:2305.14314 (2023).](https://arxiv.org/abs/2305.14314)
-
-## 🚧 Work In Progress
-
-- [ ] Code for data preparation
-- [ ] Code for model training
-- [ ] Code for model validation
-- [ ] Code for model evaluation
 
 ## 📣 Acknowledgments
 
@@ -133,7 +133,6 @@ This work is developed by [Department of Artificial Intelligence][ailab] at [Joz
 
 This work is supported by the Slovenian Research Agency and the Horizon Europe [PREPARE] project [[Grant No. 101080288][grant]].
 
-[cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [python]: https://www.python.org/
 [git]: https://git-scm.com/
 [ailab]: http://ailab.ijs.si/
