@@ -78,7 +78,7 @@ pip install -e projects/*
 
 > [!NOTE]
 > You can install separate projects by running `pip install -e projects/<project_name>`.
-> See the [Projects](#🚀-Projects) section for more information.
+> See the [Projects](#-Projects) section for more information.
 
 #### Adding a new project
 
