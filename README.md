@@ -1,5 +1,8 @@
-# MedTermEx: Medical Term Extraction
+<p align="center">
+  <img src="./docs/assets/imgs/logo.png" alt="logo" height="100" style="height: 100px;">
+</p>
 
+**Medical Term Extraction using Artificial Intelligence.**
 This project focuses on developing and fine-tuning models for medical term extraction.
 
 ## 📚 Papers
@@ -75,7 +78,7 @@ pip install -e projects/*
 
 > [!NOTE]
 > You can install separate projects by running `pip install -e projects/<project_name>`.
-> See the [Projects](#projects) section for more information.
+> See the [Projects](#🚀-Projects) section for more information.
 
 #### Adding a new project
 
@@ -95,7 +98,7 @@ pre-commit install
 
 ## ⚙️ Environment Variables
 
-Some of the projects require environment variables to be set. To set the environment variables, copy the `.env.example` file to `.env` and replace the values with the correct ones.
+Some of the projects require environment variables to be set (see individual projects for details). To set the environment variables, copy the `.env.example` file to `.env` and replace the values with the correct ones.
 
 ## 🚀 Projects
 
@@ -104,8 +107,8 @@ extracting medical terms. Each project is located in the `projects` directory.
 
 Currently, the following projects are available:
 
-- [GLiNER](projects/gliner/README.md): Medical term extraction using the GLiNER models.
-- [Llama](projects/llama/README.md): Medical term extraction using the Llama models.
+- [gliner](projects/gliner/README.md). Medical term extraction using the GLiNER models.
+- [llama](projects/llama/README.md). Medical term extraction using the Llama models.
 
 ## 🗃️ Data
 
