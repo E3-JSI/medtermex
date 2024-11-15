@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/imgs/logo.png" alt="logo" height="100" style="height: 100px;">
+  <img src="./docs/assets/imgs/logo.png" alt="logo" width="600" style="width: 600px;">
 </p>
 
 **Medical Term Extraction using Artificial Intelligence.**
