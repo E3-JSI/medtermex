@@ -5,6 +5,7 @@ torch
 transformers<=4.45.2
 jsonformer
 bitsandbytes
+guidance
 kor
 peft
 trl<=0.12.0
