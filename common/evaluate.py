@@ -17,7 +17,7 @@ class Entity(TypedDict):
 
 
 def compute_metrics(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
-    """Compute Precision, Recall, and F1 score.
+    """Compute precision, recall, and F1 score.
 
     Args:
         tp: Number of true positives.
@@ -25,7 +25,7 @@ def compute_metrics(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
         fn: Number of false negatives.
 
     Returns:
-        The Precision, Recall, and F1 score.
+        The precision, recall, and F1 score.
     """
     p = tp / (tp + fp) if tp + fp > 0 else 0.0
     r = tp / (tp + fn) if tp + fn > 0 else 0.0
@@ -79,7 +79,7 @@ def _exact_ner_evaluation(
         pred_ents: List of predicted entities.
 
     Returns:
-        The Precision, recall, and F1 score.
+        The precision, recall, and F1 score.
     """
     true_ents_set = set((ent["text"], ent["label"]) for ent in true_ents)
     pred_ents_set = set((ent["text"], ent["label"]) for ent in pred_ents)
@@ -105,7 +105,7 @@ def _relaxed_ner_evaluation(
         pred_ents: List of predicted entities.
 
     Returns:
-        The Precision, recall, and F1 score.
+        The precision, recall, and F1 score.
     """
     true_ents_set = set((ent["text"], ent["label"]) for ent in true_ents)
     pred_ents_set = set((ent["text"], ent["label"]) for ent in pred_ents)
@@ -128,10 +128,9 @@ def _overlap_ner_evaluation(
 ) -> Tuple[float, float, float]:
     """Evaluate named entity recognition performance using overlap matching.
 
-    The partial matching algorithm is based on the longest common substring between
-    the true and predicted entities. Furthermore, the label of the entity is also
-    considered during the evaluation. The inspiration for this algorithm comes from
-    the following paper:
+    It is based on the longest common substring between the true and predicted entities.
+    Furthermore, the label of the entity is also considered during the evaluation. The
+    inspiration for this algorithm comes from the following paper:
 
     @inproceedings{bert-score,
         title={BERTScore: Evaluating Text Generation with BERT},
@@ -146,7 +145,7 @@ def _overlap_ner_evaluation(
         pred_ents: List of predicted entities.
 
     Returns:
-        The Precision, recall, and F1 score.
+        The precision, recall, and F1 score.
     """
 
     if len(true_ents) == 0 or len(pred_ents) == 0:
@@ -182,10 +181,10 @@ def evaluate_ner_performance(
     Args:
         true_ents: List of true entities.
         pred_ents: List of predicted entities.
-        match_type: The evaluation method to use, either "exact" or "overlap".
+        match_type: The evaluation method to use, either "exact", "relaxed" or "overlap".
 
     Returns:
-        The Precision, recall, and F1 score.
+        The precision, recall, and F1 score.
     """
     if match_type == "exact":
         p, r, f1 = _exact_ner_evaluation(true_ents, pred_ents)
