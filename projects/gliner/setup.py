@@ -7,7 +7,7 @@ with open("requirements.txt", "r") as fh:
     requirements = fh.readlines()
 
 setup(
-    name="gliner",
+    name="mte_gliner",
     version="0.0.1",
     author="E3-JSI",
     description="The GLiNER-based Medical Term Extraction",

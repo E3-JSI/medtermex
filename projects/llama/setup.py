@@ -7,7 +7,7 @@ with open("requirements.txt", "r") as fh:
     requirements = fh.readlines()
 
 setup(
-    name="llama",
+    name="mte_llama",
     version="0.0.1",
     author="E3-JSI",
     description="The Llama-based Medical Term Extraction",
