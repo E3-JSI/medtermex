@@ -21,7 +21,9 @@ def main(args):
         "cuda" if torch.cuda.is_available() and not args.use_cpu else "cpu"
     )
 
-    model = GLiNER.from_pretrained(args.model_name_or_path)
+    model = GLiNER.from_pretrained(
+        args.model_name_or_path, load_tokenizer=True, local_files_only=True
+    )
     model.to(device)
 
     performances = {

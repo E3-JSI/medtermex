@@ -96,7 +96,9 @@ When the model is trained, the following script shows how one can use the model:
 from gliner import GLiNER
 
 # load the local model
-model = GLiNER.from_pretrained("path/to/the/model")
+model = GLiNER.from_pretrained(
+    "path/to/the/model", load_tokenizer=True, local_files_only=True
+)
 
 # (optional) load the model on the GPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -113,6 +115,22 @@ predictions = model.predict_entities(text, labels, threshold=threshold)
 for p in predictions:
     print(f"{p['text']} => {p['label']}")
 
+```
+
+### Deploying the model to HuggingFace
+
+To deploy the model to HuggingFace, run the following script in python:
+
+```python
+from gliner import GLiNER
+
+# load the local model
+model = GLiNER.from_pretrained("path/to/the/model")
+
+# deploy the model to HuggingFace
+model.push_to_hub("your-hf-username/your-model-name")
+
+# configure the model from HuggingFace ...
 ```
 
 [Google Sheet]: https://docs.google.com/spreadsheets/d/1-OtsyZ2XjnY6GUHPVQEwDo6pWqXB3QZ0Ec2AH0Y5W2s/edit?usp=sharing
