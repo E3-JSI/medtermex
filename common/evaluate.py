@@ -185,8 +185,8 @@ def evaluate_ner_performance(
     """Evaluate named entity recognition performance.
 
     Args:
-        true_ents: List of true entities.
-        pred_ents: List of predicted entities.
+        true_ents: List of true entities for each example.
+        pred_ents: List of predicted entities for each example.
         match_type: The evaluation method to use, either "exact", "relaxed" or "overlap".
 
     Returns:
