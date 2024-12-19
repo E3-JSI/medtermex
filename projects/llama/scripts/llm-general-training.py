@@ -185,6 +185,8 @@ def training(model, tokenizer, dataset, output_type, save_model_path):
     # Extract the response template from the tokenizer's chat template.
     # The goal is to identify where the assistant's response begins in the template
     # and configure the data collator to focus on training the completion part only.
+
+    # TODO: Fix regex to consistently extract response_template across different models and ensure collator handles it correctly.
     template = tokenizer.chat_template
     pattern = r"{%- if add_generation_prompt %}\s*\{\{-(.*?)\}\}\s*{%- endif %}"
     match = re.search(pattern, template)
