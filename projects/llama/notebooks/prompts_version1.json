@@ -1,0 +1,34 @@
+[
+    {
+    "Wordt er een diagnose of worden er meerdere diagnoses vastgesteld en zo ja, welke waren dit?" : "Beschrijf alle diagnoses die worden vastgesteld en alles diagnoses waar een verdenking van is. Wanneer dit genoemd wordt, geef aan of het om de linker of de rechterhand gaat. Indien er geen informatie beschikbaar is om deze vraag te beantwoorden, schrijf 'None'. ",
+    
+    "Had deze patiënt complicaties van behandelingen en zo ja, welke waren dit?" : "Beschrijf alle klachten of complicaties die deze patiënt heeft ervaren tijdens of na de behandelingen. Geef aan welke complicaties, klachten of symptomen in het dossier worden genoemd, zoals pijn, ongemak of andere bijwerkingen. Indien er geen informatie beschikbaar is om deze vraag te beantwoorden, schrijf 'None'. Indien aanvullende informatie nodig is, mag deze kort worden gespecificeerd.",
+    
+    "Is er pijnmedicatie voorgeschreven? Zo ja, welke?" : "Geef alle voorgeschreven pijnmedicatie voor deze patiënt. Voeg geen extra informatie toe. Als er geen pijnmedicatie aanwezig is, schrijf 'None'.",
+
+    "Gebruikt de patiënt bloedverdunners? Zo ja, welke?" : "Geef alle voorgeschreven bloedverdunners voor deze patiënt, inclusief naam en eventuele dosering. Voeg geen extra informatie toe. Als er geen bloedverdunner is voorgeschreven, schrijf 'None'.",
+
+    "Is er antibiotica voorgeschreven? Zo ja, welke?" : "Geef alle voorgeschreven antibiotica voor deze patiënt, inclusief naam en eventuele dosering. Voeg geen extra informatie toe. Als er geen antibiotica is voorgeschreven, schrijf 'None'.",
+    
+    "Zijn er geneesmiddelen voorgeschreven? Zo ja, welke?" : "Geef alle voorgeschreven geneesmiddelen voor deze patiënt, inclusief pijnmedicatie, bloedverdunners en antibiotica. Vermeld de namen van de medicijnen en, indien beschikbaar, de doseringen. Voeg geen extra informatie toe. Als er geen andere medicijnen zijn voorgeschreven, schrijf 'None'.",
+
+    "Welke operaties zijn er gedaan en welke details van de operaties worden er beschreven?" : "Geef alle operaties die deze patiënt heeft ondergaan. Zoek hiervoor het hele dossier door aangezien een chirurgische behandeling ook onder bijvoorbeeld diagnose genoemd kan worden.Injecties hoeven niet beschouwd te worden als een operatie. Maak een onderscheid tussen operaties die al gedaan zijn, operaties die gepland zijn en operaties die geadviseerd worden of ter overweging aan de patiënt worden meegegeven. Voeg geen extra informatie toe. Als er geen operaties worden genoemd, schrijf 'None'. Geef het aan als je twijfelt en niet goed uit het dossier kan halen welke operaties er hebben plaatsgevonden.",
+
+    "Zijn er bijzondere bevindingen gerapporteerd die tijdens de operaties gevonden werden?" : "Geef aan of er bijzondere bevindingen of ontdekkingen tijdens de operaties van deze patiënt zijn gevonden, zoals genoteerd in het dossier. Voeg alleen deze bevindingen toe en geen extra informatie. Als er geen bijzondere bevindingen worden genoemd, schrijf 'None'.",
+
+    "Zijn er injecties gegeven en welke details van de operaties worden er beschreven?" : "Geef alle injecties op die deze patiënt heeft ondergaan, zoals vermeld in het dossier. Operaties hoeven niet beschouwd te worden als een injectie. Maak een onderscheid tussen injecties die al gedaan zijn, injecties die gepland zijn en injecties die geadviseerd worden of ter overweging aan de patiënt worden meegegeven. Voeg geen extra informatie toe. Als er geen operaties worden genoemd, schrijf 'None'.",
+
+    "Had deze patiënt complicaties van een injectie of een operatie en zo ja, welke waren dit?": "Beschrijf alle klachten of complicaties die deze patiënt heeft ervaren tijdens of na een injectie of een operatie. Geef aan welke complicaties, klachten of symptomen in het dossier worden genoemd, zoals pijn, ongemak of andere bijwerkingen. Indien er geen informatie beschikbaar is om deze vraag te beantwoorden, schrijf 'None'. Indien aanvullende informatie nodig is, mag deze kort worden gespecificeerd.",
+
+    "Hoe lang heeft de operatie geduurd?": "Als er een operatie heeft plaatsgevonden, geef dan de duur van de operatie zoals vermeld in het dossier. Voeg geen extra informatie toe. Als er geen duur van de operatie wordt genoemd, schrijf 'None'.",
+
+    "Hoe lang heeft de bloedleegte geduurd?": "Als er een operatie heeft plaatsgevonden, geef dan de duur van de bloedleegte tijdens de operatie zoals genoteerd in het dossier. Voeg geen extra informatie toe. Als er geen duur van de bloedleegte wordt genoemd, schrijf 'Geen'.",
+
+    "Welke zijde van de hand is geopereerd (links of rechts)?": "Welke hand wordt behandeld of vertoont symptomen, links of rechts? Geef aan wat hierover vermeld staat in het dossier, inclusief eventuele aanwijzingen zoals operaties, behandeling, therapie, pijn, of andere symptomen aan een specifieke hand of arm.",
+    
+    "Welke medical devices zijn gebruikt zoals k-draden, gewrichtsprothesen, spalken en botankers? Zo ja, welke?": "Geef een overzicht van de medische apparaten die tijdens de behandeling zijn gebruikt, zoals K-draden, gewrichtsprothesen, spalken en botankers. Voeg alleen de specifieke apparaten toe die in het dossier worden genoemd en geen extra informatie. Als er een fabrikant of een typenaam wordt genoemd, voeg dit ook toe. Als er geen medische apparaten worden genoemd, schrijf 'None'.",
+
+    "Is er een operatie niet doorgegaan (annulering) vanwege medische risico's, zoals comorbiditeiten, te hoge bmi, eerdere operaties, slechte gezondheid van de patiënt en dergelijke.": "Geeft een overzicht van de geannuleerde operatieve afspraken op grond van medische redenen, zoals comorbiditeiten, te hoge bmi, eerdere operaties, slechte gezondheid van de patiënt. Geef aan om welke operatie het gaat, de behandeling en de redenen waarom de operatie niet door kon gaan."
+    },
+    "Je bent een medisch wetenschappelijk onderzoeker die vragen beantwoordt op basis van informatie uit een Nederlands medisch dossier. Beantwoord elke vraag uitsluitend met de informatie die in het dossier aanwezig is. Als de gevraagde informatie niet in het bestand staat, retourneert u None. Antwoord met korte steekwoorden of in korte opsommingen."
+]
