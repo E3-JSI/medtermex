@@ -2,42 +2,42 @@
   "prompt_only": {
     "system_prompt": "You are tasked with performing Named Entity Recognition on medical text. Your goal is to extract specific entities and return them in a structured JSON format as specified for each label. If the entity is not present in the text, include an empty string (\"\") for the text field. Ensure the JSON output is accurate and adheres to the described format.",
     "labels": {
-      "age": {
+      "Age": {
         "description": "The age of the patient.",
         "output_structure": {
           "text": "extracted value",
           "label": "Age"
         }
       },
-      "sex": {
+      "Sex": {
         "description": "The sex or gender of the patient.",
         "output_structure": {
           "text": "extracted value",
           "label": "Sex"
         }
       },
-      "biological_structure": {
+      "Biological structure": {
         "description": "Any part of the body, from the cellular level to general areas.",
         "output_structure": {
           "text": "extracted value",
           "label": "Biological structure"
         }
       },
-      "sign_symptom": {
+      "Sign symptom": {
         "description": "Any symptom or clinical finding.",
         "output_structure": {
           "text": "extracted value",
           "label": "Sign symptom"
         }
       },
-      "diagnostic_procedure": {
+      "Diagnostic procedure": {
         "description": "Any procedure done primarily in order to obtain more information.",
         "output_structure": {
           "text": "extracted value",
           "label": "Diagnostic procedure"
         }
       },
-      "lab_value": {
+      "Lab value": {
         "description": "Any result of a laboratory test or a diagnostic result, including any units or values present",
         "output_structure": {
           "text": "extracted value",
@@ -49,7 +49,7 @@
   "few_shot_prompting": {
     "system_prompt": "You are tasked with performing Named Entity Recognition on medical text. Your goal is to extract specific entities and return them in a structured JSON format as specified for each label. If the entity is not present in the text, include an empty string (\"\") for the text field. Ensure the JSON output is accurate and adheres to the described format.",
     "labels": {
-      "age": {
+      "Age": {
         "description": "The age of the patient.",
         "output_structure": {
           "text": "extracted value",
@@ -92,7 +92,7 @@
           ]
         }
       },
-      "sex": {
+      "Sex": {
         "description": "The sex or gender of the patient.",
         "output_structure": {
           "text": "extracted value",
@@ -135,7 +135,7 @@
           ]
         }
       },
-      "biological_structure": {
+      "Biological structure": {
         "description": "Any part of the body, from the cellular level to general areas.",
         "output_structure": {
           "text": "extracted value",
@@ -182,7 +182,7 @@
           }
         }
       },
-      "sign_symptom": {
+      "Sign symptom": {
         "description": "Any symptom or clinical finding.",
         "output_structure": {
           "text": "extracted value",
@@ -229,7 +229,7 @@
           ]
         }
       },
-      "diagnostic_procedure": {
+      "Diagnostic procedure": {
         "description": "Any procedure done primarily in order to obtain more information.",
         "output_structure": {
           "text": "extracted value",
@@ -292,7 +292,7 @@
           ]
         }
       },
-      "lab_value": {
+      "Lab value": {
         "description": "Any result of a laboratory test or a diagnostic result, including any units or values present",
         "output_structure": {
           "text": "extracted value",
