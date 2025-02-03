@@ -1,0 +1,60 @@
+name: Task
+description: Create a new task
+title: ''
+labels: ['task']
+assignees: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      description: What needs to be done?
+      placeholder: Clearly describe the task...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: input
+    id: deadline
+    attributes:
+      label: Deadline
+      description: When does this need to be completed?
+      placeholder: YYYY-MM-DD
+
+  - type: dropdown
+    id: estimated-effort
+    attributes:
+      label: Estimated Effort
+      options:
+        - '1 hour'
+        - '2-4 hours'
+        - '1 day'
+        - '2-3 days'
+        - '1 week'
+        - '2+ weeks'
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Are there any dependencies or blockers?
+      placeholder: List any related tasks, requirements, or blockers...
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: Resources
+      description: Any relevant links, docs, or resources?
