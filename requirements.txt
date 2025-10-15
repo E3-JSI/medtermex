@@ -1,12 +1,25 @@
-# common dependencies
+# BASIC
 numpy
 pandas
 spacy
+# ML & NLP
 torch
-sentence-transformers
-matplotlib
-# dataset dependencies
+unsloth==2025.8.9
+unsloth-zoo==2025.8.8
+transformers==4.55.4
+trl==0.21.0
+accelerate
+gliner==0.2.13
+timm
+ollama
+nltk
+# DATASETS
 datasets
-# utility
+# NOTEBOOKS
+marimo[recommended]
+ipywidgets
+ipython
+# UTILITIES
+pydantic
 python-dotenv
 tqdm

@@ -1,0 +1,62 @@
+[build-system]
+requires = ['setuptools>=42']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = "medtermex"
+version = "0.1.0"
+description = "A project for training and evaluating medical term extraction models"
+requires-python = ">=3.10"
+authors = [
+    {name = "Erik Novak", email = "erik.novak@ijs.si"},
+    {name = "Erik Calcina", email = "erik.calcina@ijs.si"},
+]
+maintainers = [
+    {name = "Erik Novak", email = "erik.novak@ijs.si"}
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+
+dynamic = ["dependencies"]
+keywords = [
+    "python",
+    "machine learning",
+    "natural language processing"
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3.10",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/E3-JSI/medtermex"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "flake8",
+    "flake8-pyproject",
+    "pre-commit"
+]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.flake8]
+max-line-length = 120
+ignore = ["E731", "E501", "W503"]
+exclude = [".git", ".github", "data", "docs", "logs", "results",  "models", "results"]

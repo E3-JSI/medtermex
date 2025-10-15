@@ -1,9 +1,0 @@
-numpy
-pandas
-spacy
-torch
-gliner==0.2.13
-transformers<=4.45.2
-accelerate
-nltk
-tqdm

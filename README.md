@@ -145,9 +145,16 @@ find . -type d -name '*.egg-info' -exec rm -rf {} +
 
 ## 📣 Acknowledgments
 
-This work is developed by [Department of Artificial Intelligence][ailab] at [Jozef Stefan Institute][ijs].
+This work is developed by the [Department of Artificial Intelligence][ailab]
+at [Jozef Stefan Institute][ijs], and other contributors.
 
-This work is supported by the Slovenian Research Agency and the Horizon Europe [PREPARE] project [[Grant No. 101080288][grant]].
+This work is supported by the Slovenian Research Agency.
+The project has received funding from the European Union's Horizon Europe research
+and innovation programme under [[Grant No. 101080288][grant]] ([PREPARE]).
+
+<figure>
+  <img src="./docs/assets/imgs/EU.png?raw=true" alt=European Union flag" width="80" />
+</figure>
 
 [python]: https://www.python.org/
 [git]: https://git-scm.com/
