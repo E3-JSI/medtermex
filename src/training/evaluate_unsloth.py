@@ -165,7 +165,7 @@ def main(args):
     for batch in tqdm(example_batches, desc="Generating the model outputs"):
         # get the inputs
         inputs = tokenizer(
-            [example["text"] for example in batch], padding=True, truncation=True, return_tensors="pt"
+            text=[example["text"] for example in batch], padding=True, truncation=True, return_tensors="pt"
         ).to(model.device)
         # generate the outputs for the batch
         with torch.no_grad():
