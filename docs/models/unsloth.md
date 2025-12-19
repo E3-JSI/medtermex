@@ -33,6 +33,7 @@ This implementation uses Unsloth to fine-tune LLMs for medical entity extraction
 Fine-tuning is performed using the `src.training.train_unsloth` module with LoRA/PEFT:
 
 ```bash
+# Using uv (if installed)
 uv run python -m src.training.train_unsloth \
     --train-dataset-file <path/to/train_data.json> \
     --output-dir <output_directory> \
@@ -43,7 +44,22 @@ uv run python -m src.training.train_unsloth \
     --peft-lora-alpha 16 \
     --train-num-epochs 10 \
     --train-learning-rate 2e-4
+
+# Or using standard python (activate venv first)
+source .venv-unsloth/bin/activate  # or .venv/bin/activate
+python -m src.training.train_unsloth \
+    --train-dataset-file <path/to/train_data.json> \
+    --output-dir <output_directory> \
+    --model-name <model_name> \
+    --model-max-seq-length 4096 \
+    --model-load-in-4bit true \
+    --peft-rank 8 \
+    --peft-lora-alpha 16 \
+    --train-num-epochs 10 \
+    --train-learning-rate 2e-4
 ```
+
+> **Note:** When running Python directly (not through bash scripts), you must activate the appropriate virtual environment first if not using uv.
 
 ### Fine-tuning Parameters
 
@@ -162,13 +178,25 @@ The formatter converts your data into instruction-response pairs:
 Evaluation is performed using the `src.training.evaluate_unsloth` module:
 
 ```bash
+# Using uv (if installed)
 uv run python -m src.training.evaluate_unsloth \
     --eval-dataset-file <path/to/test_data.json> \
     --results-dir <output_directory> \
     --model-dir <path/to/fine-tuned/model> \
     --model-max-seq-length 4096 \
     --eval-batch-size 4
+
+# Or using standard python (activate venv first)
+source .venv-unsloth/bin/activate  # or .venv/bin/activate
+python -m src.training.evaluate_unsloth \
+    --eval-dataset-file <path/to/test_data.json> \
+    --results-dir <output_directory> \
+    --model-dir <path/to/fine-tuned/model> \
+    --model-max-seq-length 4096 \
+    --eval-batch-size 4
 ```
+
+> **Note:** When running Python directly (not through bash scripts), you must activate the appropriate virtual environment first if not using uv.
 
 ### Evaluation Parameters
 
@@ -299,9 +327,16 @@ MODEL_STORE_NAME="${MODEL_NAME}-$(date +%Y%m%d-%H%M%S)"
 TRAIN_OUTPUT_DIR=${BASE_STORAGE_DIR}/${MODELS_DIR}/${MODEL_STORE_NAME}
 TEST_OUTPUT_DIR=${BASE_PROJECT_DIR}/${RESULTS_DIR}/${MODEL_STORE_NAME}
 
+# Automatically detect uv or python
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    RUN_PYTHON="python"
+fi
+
 # Train the model
 echo "Training the model..."
-uv run python -m src.training.train_unsloth \
+$RUN_PYTHON -m src.training.train_unsloth \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --output-dir ${TRAIN_OUTPUT_DIR} \
     --model-name ${MODEL_NAME} \
@@ -330,7 +365,7 @@ uv run python -m src.training.train_unsloth \
 
 # Evaluate the model
 echo "Testing the model..."
-uv run python -m src.training.evaluate_unsloth \
+$RUN_PYTHON -m src.training.evaluate_unsloth \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-dir ${TRAIN_OUTPUT_DIR} \
@@ -341,6 +376,8 @@ uv run python -m src.training.evaluate_unsloth \
     --model-system-prompt "${SYSTEM_PROMPT}" \
     --unique-entities ${UNIQUE_ENTITIES}
 ```
+
+> **Note:** The script automatically detects whether `uv` is available and falls back to standard `python` if not. When using standard python, the script automatically activates the appropriate virtual environment (`.venv-unsloth` or `.venv`).
 
 ## Hardware Requirements
 
@@ -359,6 +396,37 @@ uv run python -m src.training.evaluate_unsloth \
 - Use `--model-load-in-8bit true` for better quality with moderate memory
 - Reduce `--train-per-device-batch-size` if running out of memory
 - Increase `--train-gradient-accumulation-steps` to compensate for smaller batches
+
+## Running on SLURM
+
+For running Unsloth training and evaluation on HPC clusters with SLURM, a ready-to-use script is available at `slurm/train_eval_model_unsloth.sh`.
+
+### Quick Start with SLURM
+
+```bash
+# 1. Edit the SLURM script to set your parameters
+# Update placeholders: [account_name], [base_storage_dir], [base_project_dir],
+# [dataset_dir], [models_dir], [results_dir], [train_dataset_file], [test_dataset_file]
+
+# 2. Submit the job
+sbatch slurm/train_eval_model_unsloth.sh
+
+# 3. Monitor the job
+squeue -u $USER
+
+# 4. Check logs
+tail -f logs/train-model-unsloth-<job_id>.out
+```
+
+### Important Notes
+
+- **Placeholders**: The SLURM script contains placeholders (in square brackets) that must be replaced with your actual paths and parameters before submission
+- **GPU Requirements**: Unsloth requires at least 12GB VRAM (for 4-bit quantization). The script requests 1 GPU by default (`--gres=gpu:1`)
+- **Time Limit**: Default is 8 hours (`--time=08:00:00`). LLM training typically takes longer than GLiNER
+- **Memory Optimization**: The script uses 4-bit quantization by default to reduce memory usage
+- **Hugging Face Cache**: Cache directories are configured to prevent filling your home directory
+
+For more information about SLURM commands and job management, see the [SLURM documentation](../../SLURM.md).
 
 ## Best Practices
 

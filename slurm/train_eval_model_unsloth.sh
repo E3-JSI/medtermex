@@ -13,6 +13,26 @@
 
 set -e # exit on error
 
+# ===============================================
+# Python runner helper (uv or standard python)
+# ===============================================
+# Automatically use uv if available, otherwise fall back to python with venv
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    # Activate the appropriate virtual environment for Unsloth
+    # Priority: .venv-unsloth > .venv
+    if [ -d ".venv-unsloth" ]; then
+        source .venv-unsloth/bin/activate
+    elif [ -d ".venv" ]; then
+        source .venv/bin/activate
+    else
+        echo "Warning: No virtual environment found. Please create one with the appropriate dependencies."
+        exit 1
+    fi
+    RUN_PYTHON="python"
+fi
+
 echo "# ==============================================="
 echo "# Job information"
 echo "# ==============================================="
@@ -173,7 +193,7 @@ echo "Training the model..."
 echo "================================================"
 echo ""
 
-uv run python src/training/train_unsloth.py \
+$RUN_PYTHON src/training/train_unsloth.py \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --output-dir ${TRAIN_OUTPUT_DIR} \
     --model-name-or-path ${MODEL_NAME} \
@@ -205,7 +225,7 @@ echo "Testing the model..."
 echo "================================================"
 echo ""
 
-uv run python src/training/evaluate_unsloth.py \
+$RUN_PYTHON src/training/evaluate_unsloth.py \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-dir ${TRAIN_OUTPUT_DIR} \

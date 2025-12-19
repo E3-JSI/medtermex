@@ -22,6 +22,7 @@ GLiNER models from Hugging Face can be used, including:
 Fine-tuning is performed using the `src.training.train_gliner` module:
 
 ```bash
+# Using uv (if installed)
 uv run python -m src.training.train_gliner \
     --train-dataset-file <path/to/train_data.json> \
     --model-name-or-path <model_name> \
@@ -30,7 +31,20 @@ uv run python -m src.training.train_gliner \
     --train-batch-size 8 \
     --train-learning-rate 5e-6 \
     --train-weight-decay 0.01
+
+# Or using standard python (activate venv first)
+source .venv-gliner/bin/activate  # or .venv/bin/activate
+python -m src.training.train_gliner \
+    --train-dataset-file <path/to/train_data.json> \
+    --model-name-or-path <model_name> \
+    --model-output-dir <output_directory> \
+    --num-train-epochs 3 \
+    --train-batch-size 8 \
+    --train-learning-rate 5e-6 \
+    --train-weight-decay 0.01
 ```
+
+> **Note:** When running Python directly (not through bash scripts), you must activate the appropriate virtual environment first if not using uv.
 
 ### Fine-tuning Parameters
 
@@ -91,13 +105,25 @@ GLiNER expects training data in a specific tokenized format:
 Evaluation is performed using the `src.training.evaluate_gliner` module:
 
 ```bash
+# Using uv (if installed)
 uv run python -m src.training.evaluate_gliner \
     --eval-dataset-file <path/to/test_data.json> \
     --results-dir <output_directory> \
     --model-dir <path/to/fine-tuned/model> \
     --eval-threshold 0.5 \
     --eval-metrics "exact,relaxed,overlap"
+
+# Or using standard python (activate venv first)
+source .venv-gliner/bin/activate  # or .venv/bin/activate
+python -m src.training.evaluate_gliner \
+    --eval-dataset-file <path/to/test_data.json> \
+    --results-dir <output_directory> \
+    --model-dir <path/to/fine-tuned/model> \
+    --eval-threshold 0.5 \
+    --eval-metrics "exact,relaxed,overlap"
 ```
+
+> **Note:** When running Python directly (not through bash scripts), you must activate the appropriate virtual environment first if not using uv.
 
 ### Evaluation Parameters
 
@@ -213,9 +239,16 @@ MODEL_STORE_NAME="${MODEL}-$(date +%Y%m%d-%H%M%S)"
 TRAIN_OUTPUT_DIR=${BASE_STORAGE_DIR}/${MODELS_DIR}/${MODEL_STORE_NAME}
 TEST_OUTPUT_DIR=${BASE_PROJECT_DIR}/${RESULTS_DIR}/${MODEL_STORE_NAME}
 
+# Automatically detect uv or python
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    RUN_PYTHON="python"
+fi
+
 # Train the model
 echo "Training the model..."
-uv run python -m src.training.train_gliner \
+$RUN_PYTHON -m src.training.train_gliner \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --model-name-or-path ${MODEL} \
     --model-output-dir ${TRAIN_OUTPUT_DIR} \
@@ -227,7 +260,7 @@ uv run python -m src.training.train_gliner \
 
 # Evaluate the model
 echo "Testing the model..."
-uv run python -m src.training.evaluate_gliner \
+$RUN_PYTHON -m src.training.evaluate_gliner \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-dir ${TRAIN_OUTPUT_DIR} \
@@ -236,12 +269,44 @@ uv run python -m src.training.evaluate_gliner \
     --use-cpu ${EVAL_USE_CPU}
 ```
 
+> **Note:** The script automatically detects whether `uv` is available and falls back to standard `python` if not. When using standard python, the script automatically activates the appropriate virtual environment (`.venv-gliner` or `.venv`).
+
 ## Hardware Requirements
 
 - **GPU**: Recommended for training (CUDA-compatible GPU with at least 8GB VRAM)
 - **CPU**: Can be used with `--use-cpu` flag, but will be significantly slower
 - **RAM**: At least 16GB recommended
 - **Storage**: Depends on model size (typically 500MB - 2GB per model)
+
+## Running on SLURM
+
+For running GLiNER training and evaluation on HPC clusters with SLURM, a ready-to-use script is available at `slurm/train_eval_model_gliner.sh`.
+
+### Quick Start with SLURM
+
+```bash
+# 1. Edit the SLURM script to set your parameters
+# Update placeholders: [account_name], [base_storage_dir], [base_project_dir],
+# [dataset_dir], [models_dir], [results_dir], [train_dataset_file], [test_dataset_file]
+
+# 2. Submit the job
+sbatch slurm/train_eval_model_gliner.sh
+
+# 3. Monitor the job
+squeue -u $USER
+
+# 4. Check logs
+tail -f logs/train-model-gliner-<job_id>.out
+```
+
+### Important Notes
+
+- **Placeholders**: The SLURM script contains placeholders (in square brackets) that must be replaced with your actual paths and parameters before submission
+- **GPU Allocation**: The script requests 1 GPU by default (`--gres=gpu:1`). Adjust if needed based on your cluster configuration
+- **Time Limit**: Default is 4 hours (`--time=04:00:00`). Adjust based on your dataset size and model
+- **Hugging Face Cache**: The script sets `HF_HOME` and related cache directories to avoid filling your home directory
+
+For more information about SLURM commands and job management, see the [SLURM documentation](../../SLURM.md).
 
 ## Best Practices
 

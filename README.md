@@ -2,8 +2,8 @@
   <img src="./docs/assets/imgs/logo.png" alt="logo" width="600" style="width: 600px;">
 </p>
 
-**Medical Term Extraction using Artificial Intelligence.**
-This project focuses on developing and fine-tuning models for medical term extraction.
+**MEDical TERM EXtraction using Artificial Intelligence.**
+This project focuses on developing and fine-tuning models for medical term extraction and general named entity recognition.
 
 The project currently supports GLiNER, LLMs (using Unsloth) and Ollama models. It includes scripts for fine-tuning using LoRA, and provides examples for fine-tuning the models both locally and on [SLURM].
 
@@ -136,24 +136,95 @@ pip install -e .[dev]
 
 Some components may require environment variables to be set. To set the environment variables, copy the `.env.example` file (if available) to `.env` and replace the values with the correct ones.
 
-## 🚀 Running Scripts
+## 🚀 Quick Start
+
+After setting up your environment and installing the desired framework (GLiNER, Unsloth, or Ollama), you can quickly get started with model training and evaluation.
+
+### Choosing a Model
+
+The project supports three different approaches for medical term extraction:
+
+- **[GLiNER](./docs/models/gliner.md)**: Lightweight NER model, fast training, good for entity extraction with predefined labels
+- **[Unsloth](./docs/models/unsloth.md)**: LLM fine-tuning with LoRA, flexible instruction-following, best for complex medical text understanding
+- **[Ollama](./docs/models/ollama.md)**: Pre-trained model evaluation only, no training required, good for quick testing
+
+For detailed comparisons and use cases, see the [model documentation](./docs/models).
+
+### Example: Training GLiNER
+
+```bash
+# Activate GLiNER environment
+source .venv-gliner/bin/activate
+
+# Run training and evaluation script
+bash scripts/models/train_eval_model_gliner.sh
+```
+
+### Example: Training with Unsloth
+
+```bash
+# Activate Unsloth environment
+source .venv-unsloth/bin/activate
+
+# Run training and evaluation script
+bash scripts/models/train_eval_model_unsloth.sh
+```
+
+### Example: Evaluating with Ollama
+
+```bash
+# Make sure Ollama service is running
+ollama serve
+
+# Run evaluation script
+bash scripts/models/eval_model_ollama.sh
+```
+
+For more detailed instructions, see the respective model documentation in [./docs/models](./docs/models).
+
+## 🖥️ Running Scripts
 
 Documentation of the different supporting models is available in [./docs/models](./docs/models).
 
-Scripts and experiments in this project are run using:
+### Python Execution
 
-- [uv] (default, if available): Fast Python script execution
-- [python] (fallback): Regular Python interpreter
+The project supports both [uv] and standard [python]/[pip] workflows. All scripts automatically detect which is available:
 
-Both are supported. When [uv] is available, it will automatically be used for faster execution. You can explicitly use either:
+- **[uv]**: Fast Python package and script execution (used if installed, handles venv automatically)
+- **[python]**: Standard Python interpreter (always works, scripts auto-activate the appropriate venv)
 
+**Running bash scripts** (recommended):
 ```bash
-# Using uv (faster)
-uv run script_name.py
-
-# Using python (always available)
-python script_name.py
+# Scripts automatically detect uv or python and handle virtual environments
+bash scripts/models/train_eval_model_gliner.sh
+bash scripts/models/train_eval_model_unsloth.sh
+bash scripts/models/eval_model_ollama.sh
 ```
+
+**Running Python modules directly**:
+```bash
+# Using uv (automatically manages virtual environment)
+uv run python -m src.training.train_gliner --args...
+
+# Using standard python (activate virtual environment first)
+source .venv/bin/activate  # or .venv-gliner/.venv-unsloth depending on the model
+python -m src.training.train_gliner --args...
+```
+
+> **Note:**
+> - When using **bash scripts**, virtual environment activation is handled automatically
+> - When using **uv**, no manual venv activation is needed
+> - When running Python directly without uv, you must activate the appropriate venv first
+> - GLiNER and Unsloth require separate virtual environments due to incompatible dependencies
+
+### Running on SLURM Clusters
+
+For running jobs on HPC clusters with SLURM, see the [SLURM documentation](./SLURM.md) for detailed information about job scheduling and resource management. SLURM-ready scripts are available in the [`slurm/`](./slurm) directory:
+
+- `slurm/train_eval_model_gliner.sh` - GLiNER training and evaluation
+- `slurm/train_eval_model_unsloth.sh` - Unsloth training and evaluation
+
+These scripts include all necessary SLURM directives for GPU allocation, resource requests, and job management.
 
 ## 🧹 Cleanup
 

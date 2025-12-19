@@ -4,6 +4,26 @@
 set -e # exit on error
 
 # ===============================================
+# Python runner helper (uv or standard python)
+# ===============================================
+# Automatically use uv if available, otherwise fall back to python with venv
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    # Activate the appropriate virtual environment for GLiNER
+    # Priority: .venv-gliner > .venv
+    if [ -d ".venv-gliner" ]; then
+        source .venv-gliner/bin/activate
+    elif [ -d ".venv" ]; then
+        source .venv/bin/activate
+    else
+        echo "Warning: No virtual environment found. Please run 'make setup' first."
+        exit 1
+    fi
+    RUN_PYTHON="python"
+fi
+
+# ===============================================
 # Load the dataset directory parameters
 # ===============================================
 
@@ -88,7 +108,7 @@ echo "================================================"
 echo "Training the model..."
 echo "================================================"
 
-uv run python -m src.training.train_gliner \
+$RUN_PYTHON -m src.training.train_gliner \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --model-name-or-path ${MODEL} \
     --model-output-dir ${TRAIN_OUTPUT_DIR} \
@@ -103,7 +123,7 @@ echo "================================================"
 echo "Testing the model..."
 echo "================================================"
 
-uv run python -m src.training.evaluate_gliner \
+$RUN_PYTHON -m src.training.evaluate_gliner \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-dir ${TRAIN_OUTPUT_DIR} \
