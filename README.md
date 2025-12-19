@@ -7,6 +7,8 @@ This project focuses on developing and fine-tuning models for medical term extra
 
 The project currently supports GLiNER, LLMs (using Unsloth) and Ollama models. It includes scripts for fine-tuning using LoRA, and provides examples for fine-tuning the models both locally and on [SLURM].
 
+> **Note:** GLiNER and Unsloth have incompatible dependency requirements and must be installed in separate virtual environments. See the [Installation Options](#installation-options) section for details.
+
 ## ☑️ Requirements
 
 Before starting the project make sure these requirements are available:
@@ -39,9 +41,8 @@ The project is structured as follows:
 ├── .gitignore              # Files and directories to be ignored by git
 ├── README.md               # The main README file
 ├── Makefile                # Make targets for setup, cleanup, and linting
-├── pyproject.toml          # Project configuration
+├── pyproject.toml          # Project configuration and dependencies
 ├── setup.cfg               # Setup configuration
-├── requirements.txt        # Python dependencies
 ├── .python-version         # Python version specification
 ├── CHANGELOG.md            # Project changelog
 ├── LICENSE                 # Project license
@@ -54,7 +55,7 @@ The project is structured as follows:
 
 The Python version for this project is specified in the `.python-version` file. This file should contain only the major and minor version number (e.g., `3.12`).
 
-If the `.python-version` file is not present or contains an invalid format, the setup script will default to Python 3.12.
+If the `.python-version` file is not present or contains an invalid format, the setup script will default to Python version installed on the machine.
 
 To change the Python version:
 
@@ -73,11 +74,63 @@ make setup
 This will:
 
 - Create a virtual environment at `.venv`
-- Install all project dependencies (using `uv` if available, otherwise `pip`)
+- Install core project dependencies (using `uv` if available, otherwise `pip`)
 - Create necessary data directories (`data/raw`, `data/interim`, `data/final`, `data/external`)
 
 > [!NOTE]
 > The Python version is specified in `.python-version`. The setup script will use this version automatically.
+
+> [!NOTE]
+> The `make setup` command installs only the core dependencies. To use GLiNER or Unsloth, you must install them separately as optional dependencies (see [Installation Options](#installation-options)).
+
+### Installation Options
+
+The project supports multiple ML frameworks as optional dependencies. You can install only the frameworks you need:
+
+```bash
+# Install with specific framework
+pip install -e .[gliner]    # For GLiNER models
+pip install -e .[unsloth]   # For LLM fine-tuning with Unsloth
+pip install -e .[ollama]    # For Ollama models
+
+# Install all dependencies for a specific framework
+pip install -e .[all-gliner]   # GLiNER + Ollama + dev tools
+pip install -e .[all-unsloth]  # Unsloth + Ollama + dev tools
+
+# Install only core dependencies (no framework-specific packages)
+pip install -e .
+
+# Install with development tools
+pip install -e .[dev]
+```
+
+> [!WARNING]
+> **GLiNER and Unsloth are incompatible and cannot be installed together!**
+>
+> - GLiNER requires: `transformers>=4.38.2,<=4.51.0`
+> - Unsloth requires: `transformers>=4.51.3`
+>
+> These version ranges do not overlap. To use both frameworks, you must create **separate virtual environments**:
+>
+> ```bash
+> # Environment for GLiNER
+> python -m venv .venv-gliner
+> source .venv-gliner/bin/activate
+> pip install -e ".[gliner]"
+>
+> # Environment for Unsloth (create separately)
+> python -m venv .venv-unsloth
+> source .venv-unsloth/bin/activate
+> pip install -e ".[unsloth]"
+> ```
+
+**Framework-specific dependencies:**
+- `[gliner]`: GLiNER model training and evaluation
+- `[unsloth]`: LLM fine-tuning with LoRA using Unsloth
+- `[ollama]`: Ollama model integration
+- `[dev]`: Development tools (black, isort, flake8, pre-commit)
+- `[all-gliner]`: GLiNER + Ollama + dev tools (use for GLiNER projects)
+- `[all-unsloth]`: Unsloth + Ollama + dev tools (use for Unsloth projects)
 
 ## ⚙️ Environment Variables
 
