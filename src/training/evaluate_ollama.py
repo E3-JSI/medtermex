@@ -6,8 +6,12 @@ from argparse import ArgumentParser
 from importlib import reload
 from pathlib import Path
 
-import ollama
 from tqdm import tqdm
+
+try:
+    import ollama
+except ImportError:
+    raise ImportError("Ollama is not installed. Please install it with: pip install -e .[ollama]")
 
 import src.core.data.formatter as mfmt
 import src.core.metrics as mmts

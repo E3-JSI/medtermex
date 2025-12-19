@@ -4,9 +4,13 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import torch
-from gliner import GLiNER
-from gliner.data_processing.collator import DataCollator
-from gliner.training import Trainer, TrainingArguments
+
+try:
+    from gliner import GLiNER
+    from gliner.data_processing.collator import DataCollator
+    from gliner.training import Trainer, TrainingArguments
+except ImportError:
+    raise ImportError("GLiNER is not installed. Please install it with: pip install -e .[gliner]")
 
 from src.core.utils.argument_parsers import str2bool
 
@@ -17,9 +21,13 @@ from src.core.utils.argument_parsers import str2bool
 
 def get_args():
     parser = ArgumentParser("Train a GLiNER model")
-    parser.add_argument("--train-dataset-file", type=str, help="The path to the training dataset file")
-    parser.add_argument("--model-name-or-path", type=str, help="The path to the pre-trained model or the model name")
-    parser.add_argument("--model-output-dir", type=str, help="The path to the output directory for the trained model")
+    parser.add_argument("--train-dataset-file", type=str, required=True, help="The path to the training dataset file")
+    parser.add_argument(
+        "--model-name-or-path", type=str, required=True, help="The path to the pre-trained model or the model name"
+    )
+    parser.add_argument(
+        "--model-output-dir", type=str, required=True, help="The path to the output directory for the trained model"
+    )
     parser.add_argument(
         "--training-output-dir",
         type=str,

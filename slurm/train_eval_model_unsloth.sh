@@ -160,7 +160,6 @@ echo "TRAIN_WEIGHT_DECAY=${TRAIN_WEIGHT_DECAY}"
 echo "TRAIN_WARMUP_STEPS=${TRAIN_WARMUP_STEPS}"
 echo "TRAIN_LR_SCHEDULER_TYPE=${TRAIN_LR_SCHEDULER_TYPE}"
 echo "TRAIN_SEED=${TRAIN_SEED}"
-echo "LANGUAGE=${LANGUAGE}"
 echo ""
 echo "TRAIN_DATASET_FILE_PATH=${TRAIN_DATASET_FILE_PATH}"
 echo "EVAL_DATASET_FILE_PATH=${EVAL_DATASET_FILE_PATH}"
@@ -177,7 +176,7 @@ echo ""
 uv run python src/training/train_unsloth.py \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --output-dir ${TRAIN_OUTPUT_DIR} \
-    --model-name ${MODEL_NAME} \
+    --model-name-or-path ${MODEL_NAME} \
     --model-max-seq-length ${MODEL_MAX_SEQ_LENGTH} \
     --model-load-in-4bit ${MODEL_LOAD_IN_4BIT} \
     --model-load-in-8bit ${MODEL_LOAD_IN_8BIT} \
@@ -215,7 +214,7 @@ uv run python src/training/evaluate_unsloth.py \
     --model-load-in-8bit ${MODEL_LOAD_IN_8BIT} \
     --eval-batch-size ${TRAIN_PER_DEVICE_BATCH_SIZE} \
     --model-system-prompt ${SYSTEM_PROMPT} \
-    --unique-entities ${UNIQUE_ENTITIES}
+    --eval-unique-entities ${UNIQUE_ENTITIES}
 
 echo "Removing the model directory..."
 rm -rf ${TRAIN_OUTPUT_DIR}

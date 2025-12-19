@@ -250,6 +250,8 @@ class NERMetrics:
             for true_ent, pred_ent in zip(true_ents, pred_ents):
                 _p, _r, _f1, _n = _bertscore_ner_evaluation(true_ent, pred_ent, label=label)
                 p, r, f1, n = p + _p, r + _r, f1 + _f1, n + _n
+            if n == 0:
+                return 0.0, 0.0, 0.0
             p, r, f1 = p / n, r / n, f1 / n
             return p, r, f1
 

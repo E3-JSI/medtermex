@@ -32,7 +32,6 @@ dependencies = [
     "pandas",
     "spacy",
     "torch",
-    "transformers",
     "accelerate",
     "datasets",
     "nltk",
@@ -76,7 +75,6 @@ dev = [
     "isort",
     "flake8",
     "flake8-pyproject",
-    "pre-commit",
 ]
 # Separate 'all' extras due to gliner/unsloth incompatibility
 all-gliner = [

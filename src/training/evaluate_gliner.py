@@ -7,8 +7,12 @@ from importlib import reload
 from pathlib import Path
 
 import torch
-from gliner import GLiNER
 from tqdm import tqdm
+
+try:
+    from gliner import GLiNER
+except ImportError:
+    raise ImportError("GLiNER is not installed. Please install it with: pip install -e .[gliner]")
 
 import src.core.metrics as mmts
 from src.core.utils.argument_parsers import str2bool
@@ -64,7 +68,7 @@ def main(args):
     model.to(device)
 
     # change the labels only to include those that you want to evaluate
-    unique_labels = list(set([e["label"] for e in test_dataset for e in e["labels"]]))
+    unique_labels = list(set([ent["label"] for example in test_dataset for ent in example["entities"]]))
 
     # get the true and predicted entities
     true_pred_ents = {
@@ -74,7 +78,7 @@ def main(args):
 
     start_time = time.time()
     for example in tqdm(test_dataset, desc="Processing examples"):
-        true_pred_ents["true_ents"].append([label for label in example["labels"] if label["label"] in unique_labels])
+        true_pred_ents["true_ents"].append([ent for ent in example["entities"] if ent["label"] in unique_labels])
         with torch.no_grad():
             _pred_ents = model.predict_entities(example["text"], unique_labels, threshold=args.eval_threshold)
         true_pred_ents["pred_ents"].append(_pred_ents)

@@ -4,6 +4,16 @@ import re
 from argparse import ArgumentParser
 from pathlib import Path
 
+# ===============================
+# Check dependencies
+# ===============================
+
+try:
+    import gliner
+except ImportError:
+    raise ImportError("GLiNER is not installed. Please install it with: pip install -e .[gliner]")
+
+
 from gliner.data_processing import WordsSplitter
 from nltk.tokenize import sent_tokenize
 from tqdm import tqdm

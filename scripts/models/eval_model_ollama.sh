@@ -34,7 +34,6 @@ TEST_DATASET_FILE=[test_dataset_file]
 # llama3.2:3b
 MODEL_NAME=gemma3:27b
 MODEL_MAX_SEQ_LENGTH=4096
-LANGUAGE=[language]
 
 # ===============================================
 # Prepare the training and output directories

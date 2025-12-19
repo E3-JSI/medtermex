@@ -118,7 +118,7 @@ The evaluation dataset uses a different format than training:
 [
   {
     "text": "The patient has diabetes mellitus.",
-    "labels": [
+    "entities": [
       {
         "label": "Disease",
         "text": "diabetes mellitus",
@@ -129,7 +129,7 @@ The evaluation dataset uses a different format than training:
   },
   {
     "text": "Prescribed metformin 500mg.",
-    "labels": [
+    "entities": [
       {
         "label": "Medication",
         "text": "metformin"
@@ -145,7 +145,7 @@ The evaluation dataset uses a different format than training:
 
 **Format Details:**
 - `text`: Raw text string to extract entities from
-- `labels`: Array of ground truth entities, where each entity contains:
+- `entities`: Array of ground truth entities, where each entity contains:
   - `label`: Entity type/label
   - `text`: The actual entity text
   - `start` (optional): Character position where entity starts
