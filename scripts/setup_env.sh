@@ -14,12 +14,14 @@ if [ -f "./.python-version" ]; then
     PYTHON_VERSION=$(cat ./.python-version 2>/dev/null | tr -d '\n\r' | xargs)
     # Validate format is X.Y (major.minor only)
     if [[ ! $PYTHON_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
-        echo -e "${YELLOW}Invalid Python version format in .python-version: '$PYTHON_VERSION'. Using default 3.12${NC}"
-        PYTHON_VERSION="3.12"
+        echo -e "${YELLOW}Invalid Python version format in .python-version: '$PYTHON_VERSION'."
+        PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}' | cut -d. -f1,2)
+        echo -e "${YELLOW}Using default Python version $PYTHON_VERSION${NC}"
     fi
 else
-    echo -e "${YELLOW}.python-version file not found. Using default Python version 3.12${NC}"
-    PYTHON_VERSION="3.12"
+    echo -e "${YELLOW}.python-version file not found."
+    PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}' | cut -d. -f1,2)
+    echo -e "${YELLOW}Using default Python version $PYTHON_VERSION${NC}"
 fi
 
 echo -e "${GREEN}Setting up development environment...${NC}"
@@ -75,14 +77,14 @@ fi
 if command -v uv &> /dev/null; then
     echo -e "${GREEN}Using uv for package management...${NC}"
     # Install project in development mode using uv
-    uv pip install -e .[all]
+    uv pip install -e .
 else
     echo -e "${YELLOW}uv not found, falling back to pip...${NC}"
     # Upgrade pip
     echo -e "${GREEN}Upgrading pip...${NC}"
     pip install --upgrade pip
     # Install project in development mode using pip
-    pip install -e .[all]
+    pip install -e .
 fi
 
 # Create necessary directories if they don't exist

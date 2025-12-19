@@ -16,8 +16,6 @@ maintainers = [
 ]
 license = { file = "LICENSE" }
 readme = "README.md"
-
-dynamic = ["dependencies"]
 keywords = [
     "python",
     "machine learning",
@@ -29,6 +27,21 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "numpy",
+    "pandas",
+    "spacy",
+    "torch",
+    "accelerate",
+    "datasets",
+    "nltk",
+    "pydantic",
+    "python-dotenv",
+    "tqdm",
+    "marimo[recommended]",
+    "ipywidgets",
+    "ipython",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/E3-JSI/medtermex"
@@ -37,19 +50,39 @@ classifiers = [
 where = ["."]
 include = ["src*"]
 
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
-
 [project.optional-dependencies]
+# WARNING: gliner and unsloth have incompatible transformers requirements.
+# - gliner requires: transformers>=4.38.2,<=4.51.0
+# - unsloth requires: transformers>=4.51.3
+# These ranges do NOT overlap. Install them in separate virtual environments.
+# Use 'pip install -e ".[gliner]"' OR 'pip install -e ".[unsloth]"', not both.
+gliner = [
+    "gliner==0.2.13",
+    "transformers>=4.38.2,<=4.51.0",
+    "timm",
+]
+unsloth = [
+    "unsloth==2025.8.9",
+    "unsloth-zoo==2025.8.8",
+    "trl==0.21.0",
+    # transformers>=4.51.3 installed automatically by unsloth
+]
+ollama = [
+    "ollama",
+]
 dev = [
     "black",
     "isort",
     "flake8",
     "flake8-pyproject",
-    "pre-commit"
 ]
-
-all = ["medtermex[dev]"]
+# Separate 'all' extras due to gliner/unsloth incompatibility
+all-gliner = [
+    "medtermex[gliner,ollama,dev]",
+]
+all-unsloth = [
+    "medtermex[unsloth,ollama,dev]",
+]
 
 [tool.black]
 line-length = 120

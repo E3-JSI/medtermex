@@ -5,11 +5,15 @@ from argparse import ArgumentParser
 from importlib import reload
 from pathlib import Path
 
-from unsloth import FastModel
-from unsloth.chat_templates import get_chat_template, standardize_data_formats, train_on_responses_only
-from datasets import load_dataset
-from trl import SFTConfig, SFTTrainer
 
+try:
+    from unsloth import FastModel
+    from unsloth.chat_templates import get_chat_template, standardize_data_formats, train_on_responses_only
+    from trl import SFTConfig, SFTTrainer
+except ImportError:
+    raise ImportError("Unsloth is not installed. Please install it with: pip install -e .[unsloth]")
+
+from datasets import load_dataset
 
 import src.core.data.formatter as mfmt
 from src.core.utils.argument_parsers import str2bool
@@ -185,6 +189,8 @@ def get_args():
 
 
 def main(args):
+    if not Path(args.train_dataset_file).exists():
+        raise FileNotFoundError(f"Training dataset file not found: {args.train_dataset_file}")
 
     logger.info(f"Preparing the model and tokenizer for model '{args.model_name_or_path}'...")
 

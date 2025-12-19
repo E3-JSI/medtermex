@@ -8,7 +8,11 @@ from pathlib import Path
 
 import torch
 from tqdm import tqdm
-from unsloth import FastModel
+
+try:
+    from unsloth import FastModel
+except ImportError:
+    raise ImportError("Unsloth is not installed. Please install it with: pip install -e .[unsloth]")
 
 import src.core.data.formatter as mfmt
 import src.core.metrics as mmts

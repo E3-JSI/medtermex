@@ -12,6 +12,28 @@ Ollama is a framework for running large language models locally. Unlike GLiNER a
 
 **Note:** This implementation only supports evaluation, not training. Use pre-trained models that already have medical knowledge or have been fine-tuned separately.
 
+### When to Use Ollama
+
+Ollama is ideal for:
+- **Quick testing** of pre-trained models without training overhead
+- **Local development** environments with limited compute resources
+- **Privacy-sensitive** applications requiring on-premise inference
+- **Rapid prototyping** to test different models before committing to fine-tuning
+
+### SLURM/HPC Considerations
+
+**Ollama is designed for local inference and does not require SLURM or HPC resources** since it:
+- Performs evaluation only (no training)
+- Runs efficiently on local machines with CPU or moderate GPU
+- Is optimized for single-node inference
+
+**For HPC environments requiring model fine-tuning**, consider using [Unsloth](./unsloth.md) instead, which provides:
+- Full training capabilities with LoRA/PEFT
+- Efficient multi-GPU training on SLURM clusters
+- Better performance for custom medical entity extraction tasks
+
+If you need to evaluate Ollama models on HPC clusters, you can run the evaluation scripts directly on compute nodes without special SLURM job scripts.
+
 ## Supported Models
 
 Ollama supports a wide range of models available through the Ollama registry:
@@ -61,12 +83,23 @@ For fine-tuning LLMs for medical entity extraction, see the [Unsloth documentati
 Evaluation is performed using the `src.training.evaluate_ollama` module:
 
 ```bash
+# Using uv (if installed)
 uv run python -m src.training.evaluate_ollama \
     --eval-dataset-file <path/to/test_data.json> \
     --results-dir <output_directory> \
     --model-name gemma3:27b \
     --model-max-seq-length 4096
+
+# Or using standard python (activate venv first)
+source .venv/bin/activate
+python -m src.training.evaluate_ollama \
+    --eval-dataset-file <path/to/test_data.json> \
+    --results-dir <output_directory> \
+    --model-name gemma3:27b \
+    --model-max-seq-length 4096
 ```
+
+> **Note:** When running Python directly (not through bash scripts), you must activate the appropriate virtual environment first if not using uv.
 
 ### Evaluation Parameters
 
@@ -181,8 +214,16 @@ Evaluation produces two JSON files:
 ### Basic Evaluation
 
 ```bash
-# Evaluate a Gemma model
+# Using uv (if installed)
 uv run python -m src.training.evaluate_ollama \
+    --eval-dataset-file data/final/test.json \
+    --results-dir results/gemma3-27b \
+    --model-name gemma3:27b \
+    --model-max-seq-length 4096
+
+# Or using standard python (activate venv first)
+source .venv/bin/activate
+python -m src.training.evaluate_ollama \
     --eval-dataset-file data/final/test.json \
     --results-dir results/gemma3-27b \
     --model-name gemma3:27b \
@@ -192,14 +233,25 @@ uv run python -m src.training.evaluate_ollama \
 ### With Custom System Prompt
 
 ```bash
-# Use a custom system prompt
+# Using uv (if installed)
 uv run python -m src.training.evaluate_ollama \
     --eval-dataset-file data/final/test.json \
     --results-dir results/medgemma \
     --model-name alibayram/medgemma:4b \
     --model-system-prompt "Extract medical entities including diseases, medications, and dosages." \
     --model-max-seq-length 4096
+
+# Or using standard python (activate venv first)
+source .venv/bin/activate
+python -m src.training.evaluate_ollama \
+    --eval-dataset-file data/final/test.json \
+    --results-dir results/medgemma \
+    --model-name alibayram/medgemma:4b \
+    --model-system-prompt "Extract medical entities including diseases, medications, and dosages." \
+    --model-max-seq-length 4096
 ```
+
+> **Note:** When running Python directly (not through bash scripts), you must activate the appropriate virtual environment first if not using uv.
 
 ### Using the Bash Script
 
@@ -244,7 +296,14 @@ echo "================================================"
 echo "Testing the model..."
 echo "================================================"
 
-uv run python -m src.training.evaluate_ollama \
+# Automatically detect uv or python
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    RUN_PYTHON="python"
+fi
+
+$RUN_PYTHON -m src.training.evaluate_ollama \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-name ${MODEL_NAME} \
@@ -252,6 +311,8 @@ uv run python -m src.training.evaluate_ollama \
 
 echo "End time: $(date)"
 ```
+
+> **Note:** The script automatically detects whether `uv` is available and falls back to standard `python` if not. When using standard python, the script automatically activates an available virtual environment (`.venv`, `.venv-gliner`, or `.venv-unsloth`).
 
 ## Hardware Requirements
 

@@ -3,7 +3,16 @@ import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
-import ollama
+
+# ===============================
+# Check dependencies
+# ===============================
+
+try:
+    import ollama
+except ImportError:
+    raise ImportError("Ollama is not installed. Please install it with: pip install -e .[ollama]")
+
 from tqdm import tqdm
 
 from src.core.interface import define_medical_entities_class

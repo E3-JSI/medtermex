@@ -13,6 +13,26 @@
 
 set -e # exit on error
 
+# ===============================================
+# Python runner helper (uv or standard python)
+# ===============================================
+# Automatically use uv if available, otherwise fall back to python with venv
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    # Activate the appropriate virtual environment for Unsloth
+    # Priority: .venv-unsloth > .venv
+    if [ -d ".venv-unsloth" ]; then
+        source .venv-unsloth/bin/activate
+    elif [ -d ".venv" ]; then
+        source .venv/bin/activate
+    else
+        echo "Warning: No virtual environment found. Please create one with the appropriate dependencies."
+        exit 1
+    fi
+    RUN_PYTHON="python"
+fi
+
 echo "# ==============================================="
 echo "# Job information"
 echo "# ==============================================="
@@ -160,7 +180,6 @@ echo "TRAIN_WEIGHT_DECAY=${TRAIN_WEIGHT_DECAY}"
 echo "TRAIN_WARMUP_STEPS=${TRAIN_WARMUP_STEPS}"
 echo "TRAIN_LR_SCHEDULER_TYPE=${TRAIN_LR_SCHEDULER_TYPE}"
 echo "TRAIN_SEED=${TRAIN_SEED}"
-echo "LANGUAGE=${LANGUAGE}"
 echo ""
 echo "TRAIN_DATASET_FILE_PATH=${TRAIN_DATASET_FILE_PATH}"
 echo "EVAL_DATASET_FILE_PATH=${EVAL_DATASET_FILE_PATH}"
@@ -174,10 +193,10 @@ echo "Training the model..."
 echo "================================================"
 echo ""
 
-uv run python src/training/train_unsloth.py \
+$RUN_PYTHON src/training/train_unsloth.py \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --output-dir ${TRAIN_OUTPUT_DIR} \
-    --model-name ${MODEL_NAME} \
+    --model-name-or-path ${MODEL_NAME} \
     --model-max-seq-length ${MODEL_MAX_SEQ_LENGTH} \
     --model-load-in-4bit ${MODEL_LOAD_IN_4BIT} \
     --model-load-in-8bit ${MODEL_LOAD_IN_8BIT} \
@@ -206,7 +225,7 @@ echo "Testing the model..."
 echo "================================================"
 echo ""
 
-uv run python src/training/evaluate_unsloth.py \
+$RUN_PYTHON src/training/evaluate_unsloth.py \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-dir ${TRAIN_OUTPUT_DIR} \
@@ -215,7 +234,7 @@ uv run python src/training/evaluate_unsloth.py \
     --model-load-in-8bit ${MODEL_LOAD_IN_8BIT} \
     --eval-batch-size ${TRAIN_PER_DEVICE_BATCH_SIZE} \
     --model-system-prompt ${SYSTEM_PROMPT} \
-    --unique-entities ${UNIQUE_ENTITIES}
+    --eval-unique-entities ${UNIQUE_ENTITIES}
 
 echo "Removing the model directory..."
 rm -rf ${TRAIN_OUTPUT_DIR}

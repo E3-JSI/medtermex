@@ -1,7 +1,28 @@
 #! /bin/bash
-# Train and evaluate the model using Unsloth
+# Evaluate the model using Ollama
 
 set -e # exit on error
+
+# ===============================================
+# Python runner helper (uv or standard python)
+# ===============================================
+# Automatically use uv if available, otherwise fall back to python with venv
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    # Activate the virtual environment (Ollama works with any venv)
+    if [ -d ".venv" ]; then
+        source .venv/bin/activate
+    elif [ -d ".venv-gliner" ]; then
+        source .venv-gliner/bin/activate
+    elif [ -d ".venv-unsloth" ]; then
+        source .venv-unsloth/bin/activate
+    else
+        echo "Warning: No virtual environment found. Please run 'make setup' first."
+        exit 1
+    fi
+    RUN_PYTHON="python"
+fi
 
 # ===============================================
 # Load the dataset directory parameters
@@ -34,7 +55,6 @@ TEST_DATASET_FILE=[test_dataset_file]
 # llama3.2:3b
 MODEL_NAME=gemma3:27b
 MODEL_MAX_SEQ_LENGTH=4096
-LANGUAGE=[language]
 
 # ===============================================
 # Prepare the training and output directories
@@ -64,7 +84,7 @@ echo "================================================"
 echo "Testing the model..."
 echo "================================================"
 
-uv run python -m src.training.evaluate_ollama \
+$RUN_PYTHON -m src.training.evaluate_ollama \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-name ${MODEL_NAME} \

@@ -4,6 +4,26 @@
 set -e # exit on error
 
 # ===============================================
+# Python runner helper (uv or standard python)
+# ===============================================
+# Automatically use uv if available, otherwise fall back to python with venv
+if command -v uv &> /dev/null; then
+    RUN_PYTHON="uv run python"
+else
+    # Activate the appropriate virtual environment for Unsloth
+    # Priority: .venv-unsloth > .venv
+    if [ -d ".venv-unsloth" ]; then
+        source .venv-unsloth/bin/activate
+    elif [ -d ".venv" ]; then
+        source .venv/bin/activate
+    else
+        echo "Warning: No virtual environment found. Please run 'make setup' first."
+        exit 1
+    fi
+    RUN_PYTHON="python"
+fi
+
+# ===============================================
 # Load the dataset directory parameters
 # ===============================================
 
@@ -88,10 +108,10 @@ echo "================================================"
 echo "Training the model..."
 echo "================================================"
 
-uv run python -m src.training.train_unsloth \
+$RUN_PYTHON -m src.training.train_unsloth \
     --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --output-dir ${TRAIN_OUTPUT_DIR} \
-    --model-name ${MODEL_NAME} \
+    --model-name-or-path ${MODEL_NAME} \
     --model-max-seq-length ${MODEL_MAX_SEQ_LENGTH} \
     --model-load-in-4bit ${MODEL_LOAD_IN_4BIT} \
     --model-load-in-8bit ${MODEL_LOAD_IN_8BIT} \
@@ -119,13 +139,13 @@ echo "================================================"
 echo "Testing the model..."
 echo "================================================"
 
-uv run python -m src.training.evaluate_unsloth \
+$RUN_PYTHON -m src.training.evaluate_unsloth \
     --eval-dataset-file ${EVAL_DATASET_FILE_PATH} \
     --results-dir ${TEST_OUTPUT_DIR} \
     --model-dir ${TRAIN_OUTPUT_DIR} \
     --model-max-seq-length ${MODEL_MAX_SEQ_LENGTH} \
     --model-load-in-4bit ${MODEL_LOAD_IN_4BIT} \
     --model-load-in-8bit ${MODEL_LOAD_IN_8BIT} \
-    --eval-batch-size ${TRAIN_PER_DEVICE_BATCH_SIZE} \
     --model-system-prompt ${SYSTEM_PROMPT} \
-    --unique-entities ${UNIQUE_ENTITIES}
+    --eval-batch-size ${TRAIN_PER_DEVICE_BATCH_SIZE} \
+    --eval-unique-entities ${UNIQUE_ENTITIES}
