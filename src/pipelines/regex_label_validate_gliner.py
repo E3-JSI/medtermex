@@ -46,6 +46,7 @@ def extract_gliner_entities_train(example, splitter):
 
     skipped_entities = 0
     present_entities = []
+    seen_spans = set()
     for entity in example.get("entities", []):
         ent_text, ent_label = entity["text"], entity["label"]
 
@@ -70,13 +71,15 @@ def extract_gliner_entities_train(example, splitter):
             ]
 
             if entity_tokens:
-                present_entities.append(
-                    [
-                        entity_tokens[0][1],
-                        entity_tokens[-1][1],
-                        ent_label,
-                    ]
-                )
+                span = (entity_tokens[0][1], entity_tokens[-1][1], ent_label)
+                if span in seen_spans:
+                    continue
+                seen_spans.add(span)
+                present_entities.append([
+                    entity_tokens[0][1],
+                    entity_tokens[-1][1],
+                    ent_label,
+                ])
 
     return {"tokenized_text": tokenized_text, "ner": present_entities}, skipped_entities
 
