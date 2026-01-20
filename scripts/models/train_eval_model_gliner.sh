@@ -84,9 +84,6 @@ fi
 # Load the test output directory
 TEST_OUTPUT_DIR=${BASE_PROJECT_DIR}/${RESULTS_DIR}/${MODEL_STORE_NAME}
 
-# Preprocessed/validated training dataset path
-PROCESSED_TRAIN_DATASET_FILE_PATH=${TRAIN_OUTPUT_DIR}/train_dataset_gliner.json
-
 echo "# ==============================================="
 echo "# Parameters"
 echo "# ==============================================="
@@ -102,22 +99,9 @@ echo "EVAL_USE_CPU=${EVAL_USE_CPU}"
 echo ""
 echo "TRAIN_DATASET_FILE_PATH=${TRAIN_DATASET_FILE_PATH}"
 echo "EVAL_DATASET_FILE_PATH=${EVAL_DATASET_FILE_PATH}"
-echo "PROCESSED_TRAIN_DATASET_FILE_PATH=${PROCESSED_TRAIN_DATASET_FILE_PATH}"
 echo "TRAIN_OUTPUT_DIR=${TRAIN_OUTPUT_DIR}"
 echo "TEST_OUTPUT_DIR=${TEST_OUTPUT_DIR}"
 echo ""
-
-
-echo "================================================"
-echo "Validating/preprocessing training dataset..."
-echo "================================================"
-
-$RUN_PYTHON -m src.pipelines.regex_label_validate_gliner \
-    --input-file ${TRAIN_DATASET_FILE_PATH} \
-    --output-file ${PROCESSED_TRAIN_DATASET_FILE_PATH} \
-    --format train \
-    --skip-empty-entities \
-    --entities-key entities
 
 
 echo "================================================"
@@ -125,7 +109,7 @@ echo "Training the model..."
 echo "================================================"
 
 $RUN_PYTHON -m src.training.train_gliner \
-    --train-dataset-file ${PROCESSED_TRAIN_DATASET_FILE_PATH} \
+    --train-dataset-file ${TRAIN_DATASET_FILE_PATH} \
     --model-name-or-path ${MODEL} \
     --model-output-dir ${TRAIN_OUTPUT_DIR} \
     --train-num-epochs ${TRAIN_NUM_EPOCHS} \
