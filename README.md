@@ -7,7 +7,7 @@ This project focuses on developing and fine-tuning models for medical term extra
 
 The project currently supports GLiNER, LLMs (using Unsloth) and Ollama models. It includes scripts for fine-tuning using LoRA, and provides examples for fine-tuning the models both locally and on [SLURM].
 
-> **Note:** GLiNER and Unsloth have incompatible dependency requirements and must be installed in separate virtual environments. See the [Installation Options](#installation-options) section for details.
+> **Note:** GLiNER and Unsloth are exposed as separate extras and should be installed one at a time. Although recent versions overlap on `transformers`, mixing them in one environment risks subtle conflicts (tokenizers, accelerate, CUDA wheels). See the [Installation Options](#installation-options) section for details.
 
 ## ☑️ Requirements
 
@@ -104,13 +104,24 @@ pip install -e .
 pip install -e .[dev]
 ```
 
-> [!WARNING]
-> **GLiNER and Unsloth are incompatible and cannot be installed together!**
+> [!NOTE]
+> **Install one framework extra at a time.**
 >
-> - GLiNER requires: `transformers>=4.38.2,<=4.51.0`
-> - Unsloth requires: `transformers>=4.51.3`
+> Although `gliner>=0.2.26` and `unsloth>=2026.5.2` both accept `transformers>=4.51.3`, we keep them as separate extras to avoid subtle conflicts (tokenizers, accelerate, CUDA wheels) and to keep installs small.
 >
-> These version ranges do not overlap. To use both frameworks, you must create **separate virtual environments**:
+> **Default (single venv, switch sides by reinstalling):**
+>
+> ```bash
+> # Activate the venv created by `make setup`
+> source .venv/bin/activate
+>
+> # Install the side you need
+> pip install -e ".[gliner]"     # or pip install -e ".[unsloth]"
+> ```
+>
+> **Alternative (two named venvs, keep both installed simultaneously):**
+>
+> The training/evaluation scripts will pick `.venv-gliner` / `.venv-unsloth` if they exist, otherwise fall back to `.venv`.
 >
 > ```bash
 > # Environment for GLiNER
@@ -153,8 +164,8 @@ For detailed comparisons and use cases, see the [model documentation](./docs/mod
 ### Example: Training GLiNER
 
 ```bash
-# Activate GLiNER environment
-source .venv-gliner/bin/activate
+# Activate venv (use .venv-gliner if you set up dual venvs)
+source .venv/bin/activate
 
 # Run training and evaluation script
 bash scripts/models/train_eval_model_gliner.sh
@@ -163,8 +174,8 @@ bash scripts/models/train_eval_model_gliner.sh
 ### Example: Training with Unsloth
 
 ```bash
-# Activate Unsloth environment
-source .venv-unsloth/bin/activate
+# Activate venv (use .venv-unsloth if you set up dual venvs)
+source .venv/bin/activate
 
 # Run training and evaluation script
 bash scripts/models/train_eval_model_unsloth.sh
@@ -207,7 +218,7 @@ bash scripts/models/eval_model_ollama.sh
 uv run python -m src.training.train_gliner --args...
 
 # Using standard python (activate virtual environment first)
-source .venv/bin/activate  # or .venv-gliner/.venv-unsloth depending on the model
+source .venv/bin/activate  # or .venv-gliner/.venv-unsloth if you set up dual venvs
 python -m src.training.train_gliner --args...
 ```
 
@@ -215,7 +226,7 @@ python -m src.training.train_gliner --args...
 > - When using **bash scripts**, virtual environment activation is handled automatically
 > - When using **uv**, no manual venv activation is needed
 > - When running Python directly without uv, you must activate the appropriate venv first
-> - GLiNER and Unsloth require separate virtual environments due to incompatible dependencies
+> - Install only one of `[gliner]` or `[unsloth]` per environment (or use dual venvs `.venv-gliner` / `.venv-unsloth`)
 
 ### Running on SLURM Clusters
 

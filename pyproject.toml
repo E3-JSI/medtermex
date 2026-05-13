@@ -28,19 +28,19 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "numpy",
-    "pandas",
-    "spacy",
+    "numpy>=2.0,<3",
+    "pandas>=2.2,<4",
+    "spacy>=3.8,<4",
     "torch",
-    "accelerate",
-    "datasets",
-    "nltk",
-    "pydantic",
-    "python-dotenv",
-    "tqdm",
-    "marimo[recommended]",
-    "ipywidgets",
-    "ipython",
+    "accelerate>=1.0,<2",
+    "datasets>=3.0,<5",
+    "nltk>=3.9,<4",
+    "pydantic>=2.10,<3",
+    "python-dotenv>=1.0,<2",
+    "tqdm>=4.66,<5",
+    "marimo[recommended]>=0.13,<1",
+    "ipywidgets>=8.1,<9",
+    "ipython>=8.20",
 ]
 
 [project.urls]
@@ -51,20 +51,20 @@ where = ["."]
 include = ["src*"]
 
 [project.optional-dependencies]
-# WARNING: gliner and unsloth have incompatible transformers requirements.
-# - gliner requires: transformers>=4.38.2,<=4.51.0
-# - unsloth requires: transformers>=4.51.3
-# These ranges do NOT overlap. Install them in separate virtual environments.
-# Use 'pip install -e ".[gliner]"' OR 'pip install -e ".[unsloth]"', not both.
+# NOTE: Although gliner 0.2.26+ and unsloth 2026.5+ both accept
+# transformers >=4.51.3, we keep them as separate extras to avoid
+# subtle conflicts (tokenizers, accelerate, CUDA wheels). Install
+# one extra at a time:
+#   pip install -e ".[gliner]"   OR   pip install -e ".[unsloth]"
 gliner = [
-    "gliner==0.2.13",
-    "transformers>=4.38.2,<=4.51.0",
-    "timm",
+    "gliner>=0.2.26,<0.3",
+    "transformers>=4.51.3,<5.7",
+    "timm>=1.0,<2",
 ]
 unsloth = [
-    "unsloth==2025.8.9",
-    "unsloth-zoo==2025.8.8",
-    "trl==0.21.0",
+    "unsloth>=2026.5.2,<2027",
+    "unsloth-zoo>=2026.5.1,<2027",
+    "trl>=0.24,<0.25",
     # transformers>=4.51.3 installed automatically by unsloth
 ]
 ollama = [
