@@ -260,7 +260,7 @@ def main(args):
     logger.info("Preparing the trainer...")
     trainer = SFTTrainer(
         model=model,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         train_dataset=dataset["train"],
         eval_dataset=dataset["test"],
         args=SFTConfig(

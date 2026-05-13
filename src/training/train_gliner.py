@@ -7,7 +7,7 @@ import torch
 
 try:
     from gliner import GLiNER
-    from gliner.data_processing.collator import DataCollator
+    from gliner.data_processing.collator import SpanDataCollator
     from gliner.training import Trainer, TrainingArguments
 except ImportError:
     raise ImportError("GLiNER is not installed. Please install it with: pip install -e .[gliner]")
@@ -75,7 +75,7 @@ def main(args):
     model = GLiNER.from_pretrained(args.model_name_or_path)
 
     # prepare the data collator
-    data_collator = DataCollator(model.config, data_processor=model.data_processor, prepare_labels=True)
+    data_collator = SpanDataCollator(model.config, data_processor=model.data_processor, prepare_labels=True)
 
     # train the model
     model.to(device)
@@ -99,7 +99,7 @@ def main(args):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=valid_dataset,
-        tokenizer=model.data_processor.transformer_tokenizer,
+        processing_class=model.data_processor.transformer_tokenizer,
         data_collator=data_collator,
     )
     trainer.train()
